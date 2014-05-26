@@ -1,30 +1,30 @@
-itofix: # ($a0)
-	sll	$v0, $a0, 16
-	jr	$ra
+.macro	itofix(%fix, %int)
+	sll	%fix, %int, 16
+.endmacro
 
-fixtoi: # ($a0)
-	srl	$v0, $a0, 16
-	jr	$ra
+.macro	fixtoi(%int, %fix)
+	srl	%int, %fix, 16
+.endmacro
 
-fix_add: # ($a0, $a1)
-	addu	$v0, $a0, $a1
-	jr	$ra
+.macro	fix_add(%result, %arg1, %arg2)
+	addu	%result, %arg1, %arg2
+.endmacro
 
-fix_sub: # ($a0, $a1)
-	subu	$v0, $a0, $a1
-	jr	$ra
+.macro	fix_sub(%result, %arg1, %arg2)
+	subu	%result, %arg1, %arg2
+.endmacro
 
-fix_mult: # ($a0, $a1)
-	mulu	$t0, $a0, $a1
-	srl	$v0, $t0, 16
-	mfhi	$t0
-	sll	$t0, $t0, 16
-	or	$v0, $v0, $t0
-	jr	$ra
+.macro	fix_mult(%result, %arg1, %arg2, %aux)
+	mulu	%aux, %arg1, %arg2
+	srl	%result, %aux, 16
+	mfhi	%aux
+	sll	%aux, %aux, 16
+	or	%result, %result, %aux
+.endmacro
 
-fix_divint: # ($a0, $a1)
-	divu	$v0, $a0, $a1
-	jr	$ra
+.macro	fix_div_int(%result, %arg1, %arg2)
+	divu	%result, %arg1, %arg2
+.endmacro
 
 fix_div: # ($a0, $a1)
 	divu	$a0, $a1

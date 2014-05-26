@@ -4,12 +4,6 @@
 		syscall
 .end_macro
 
-.macro printChar (%val)
-		li	$v0, 11
-		li	$a0, %val
-		syscall
-.end_macro
-
 .macro readString (%buf, %size)
 		li	$v0, 8
 		la	$a0, %buf
@@ -17,16 +11,41 @@
 		syscall
 .end_macro
 
-.macro printInt (%reg)
-		li	$v0, 1
-		move	$a0, %reg
-		syscall
-.end_macro
-
 .macro readInt
 		li	$v0, 5
 		syscall
 .end_macro
+
+.eqv RO 0
+.eqv RW 1
+.macro openFile (%filename, %flag)
+		li	$v0, 13
+		la	$a0, %filename
+		li	$a1, %flag
+		syscall
+.endmacro
+
+.macro readFile (%handler, %buffer, %bytes)
+		li	$v0, 14
+		move	$a0, %handler
+		la	$a1, %buffer
+		move	$a2, %bytes
+		syscall
+.endmacro
+
+.macro writeFile (%handler, %buffer, %bytes)
+		li	$v0, 15
+		move	$a0, %handler
+		la	$a1, %buffer
+		move	$a2, %bytes
+		syscall
+.endmacro
+
+.macro malloc (%size)
+		li	$v0, 9
+		li	$a0, %size
+		syscall
+.endmacro
 
 .macro exit (%imm)
 		li	$v0, 17
