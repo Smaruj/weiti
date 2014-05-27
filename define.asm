@@ -7,7 +7,7 @@
 .macro readString (%buf, %size)
 		li	$v0, 8
 		la	$a0, %buf
-		li	$a1, %size
+		move	$a1, %size
 		syscall
 .end_macro
 
@@ -23,29 +23,35 @@
 		la	$a0, %filename
 		li	$a1, %flag
 		syscall
-.endmacro
+.end_macro
+
+.macro closeFile (%filehandle)
+		li	$v0, 16
+		move	$a0, %filehandle
+		syscall
+.end_macro
 
 .macro readFile (%handler, %buffer, %bytes)
 		li	$v0, 14
 		move	$a0, %handler
-		la	$a1, %buffer
+		move	$a1, %buffer
 		move	$a2, %bytes
 		syscall
-.endmacro
+.end_macro
 
 .macro writeFile (%handler, %buffer, %bytes)
 		li	$v0, 15
 		move	$a0, %handler
-		la	$a1, %buffer
+		move	$a1, %buffer
 		move	$a2, %bytes
 		syscall
-.endmacro
+.end_macro
 
 .macro malloc (%size)
 		li	$v0, 9
-		li	$a0, %size
+		move	$a0, %size
 		syscall
-.endmacro
+.end_macro
 
 .macro exit (%imm)
 		li	$v0, 17

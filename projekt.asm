@@ -20,14 +20,13 @@ output_BMP:	.space	40
 static_buffer:	.align	2
 		.space	4
 
-.eqv	BMP_HEAD_SIZE	2
-.eqv	BMP_HEAD_PIXMAP	10
+.eqv	BMP_HEAD_SIZE	0
+.eqv	BMP_HEAD_PIXMAP	8
 BMP_head_template:
-		.ascii	"BM"
-		.space	4			# (+2) size of file in bytes
-		.byte	0x00 0x00		# (+6)
+		.space	4			# (+0) size of file in bytes
+		.byte	0x00 0x00		# (+4)
 			0x00 0x00
-		.space  4			# (+10) pixel array offset
+		.space  4			# (+8) pixel array offset
 
 .eqv	DIB_HEAD_WIDTH	4
 .eqv	DIB_HEAD_HEIGHT	8
@@ -58,8 +57,6 @@ BMP_head_template:
 		.globl	main
 		.text
 main:
-		addiu	$sp, $sp, -32
-		addiu	$fp, $sp, 32
 #####
 # get input file name
 		printBmpPrompt (input_BMP_prompt)
@@ -73,11 +70,11 @@ main:
 		la	$a0, output_BMP
 		jal	sanitizeString
 #####
-# get cutoff points, store in -4($fp) and -8($fp)
-		li	$t0, 0		# initial lower bound
-		li	$t1, 765	# initial upper bound
+# get cutoff points, store in $t6 and $t7
+		li	$t6, 0		# initial lower bound
+		li	$t7, 255	# initial upper bound
 
-		printCutoffPrompt (cutoff_l_prompt, $t0, $t1)
+		printCutoffPrompt (cutoff_l_prompt, $t6, $t7)
 		readInt()
 
 		move	$a0, $v0	# integer
